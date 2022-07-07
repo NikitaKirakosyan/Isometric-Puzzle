@@ -19,6 +19,7 @@ namespace NikitaKirakosyan.UI
 
         public override void Close()
         {
+            Debug.Log(1);
             Instance.gameObject.SetActive(false);
         }
     }
