@@ -15,15 +15,5 @@ namespace NikitaKirakosyan.UI
         {
             _nextLevelButton.onClick.AddListener(SceneLoadingManager.Instance.LoadNextLevel);
         }
-
-        public override void Open()
-        {
-            Instance.gameObject.SetActive(true);
-        }
-
-        public override void Close()
-        {
-            Instance.gameObject.SetActive(false);
-        }
     }
 }

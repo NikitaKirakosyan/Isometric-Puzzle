@@ -2,7 +2,9 @@
  * author : Kirakosyan Nikita
  * e-mail : nikita.kirakosyan.work@gmail.com
  */
+using System;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace NikitaKirakosyan.UI
@@ -24,20 +26,69 @@ namespace NikitaKirakosyan.UI
             }
         }
 
-        public static void CloseAllWindows()
+        public static async UniTask<bool> CloseAllWindows()
         {
             var willClosedWindow = FindObjectsOfType<MonoBehaviour>().OfType<IWindowClose>().ToList();
 
             if (willClosedWindow == null || willClosedWindow.Count == 0)
             {
-                return;
+                return false;
             }
 
-            willClosedWindow.ForEach(window => window.Close());
+            while (!willClosedWindow.TrueForAll(window => window.Close().Status == UniTaskStatus.Succeeded))
+            {
+                try
+                {
+                    await UniTask.Yield(new System.Threading.CancellationToken(true));
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+                    return false;
+                }
+            }
+
+            return true;
         }
 
-        public abstract void Open();
+        public async UniTask<bool> Open()
+        {
+            gameObject.SetActive(true);
 
-        public abstract void Close();
+            while (!gameObject.activeSelf)
+            {
+                try
+                {
+                    await UniTask.Yield(new System.Threading.CancellationToken(true));
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public async UniTask<bool> Close()
+        {
+            gameObject.SetActive(false);
+
+            while (gameObject.activeSelf)
+            {
+                try
+                {
+                    await UniTask.Yield(new System.Threading.CancellationToken(true));
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

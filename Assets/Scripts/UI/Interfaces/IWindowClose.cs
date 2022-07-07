@@ -3,10 +3,12 @@
  * e-mail : nikita.kirakosyan.work@gmail.com
  */
 
+using Cysharp.Threading.Tasks;
+
 namespace NikitaKirakosyan.UI
 {
     public interface IWindowClose
     {
-        public abstract void Close();
+        public UniTask<bool> Close();
     }
 }

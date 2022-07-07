@@ -84,6 +84,7 @@ namespace NikitaKirakosyan.Player
             {
                 position = Vector3.MoveTowards(position, destination, _moveSpeed * Time.deltaTime);
                 transform.position = position + _deltaPlayerPosition;
+
                 await UniTask.Yield();
             }
 

@@ -4,6 +4,7 @@
  */
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using NikitaKirakosyan.Patterns;
 using NikitaKirakosyan.UI;
 using UnityEngine;
@@ -55,18 +56,18 @@ namespace NikitaKirakosyan
             LoadLevelAsync(SceneManager.GetActiveScene().buildIndex + 1, false);
         }
 
-        private void LoadLevelAsync(int sceneIndex, bool undloadScene = true)
+        private async void LoadLevelAsync(int sceneIndex, bool undloadScene = true)
         {
             if (undloadScene)
             {
-                SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(1));
+                await SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(1));
             }
 
             SceneLoadingAsync = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
             SceneLoadingAsync.completed += delegate { OnSceneLoadingCompleted(); };
 
-            LoadingWindow.CloseAllWindows();
-            LoadingWindow.Instance.Open();
+            await LoadingWindow.CloseAllWindows();
+            await LoadingWindow.Instance.Open();
         }
 
         private void DestroyAnotherCameras()
@@ -84,10 +85,10 @@ namespace NikitaKirakosyan
 
         private void OnSceneLoadingCompleted()
         {
+            LoadingWindow.Instance.Close().Forget();
+
             DestroyAnotherCameras();
             SetActiveNextScene();
-
-            LoadingWindow.Instance.Close();
 
             SceneLoadingAsync.completed -= delegate { OnSceneLoadingCompleted(); };
             SceneLoadingAsync = null;

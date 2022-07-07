@@ -18,14 +18,14 @@ namespace NikitaKirakosyan
 
         private void OnEnable()
         {
-            OnGameFinished += FinishWindow.Instance.Open;
+            OnGameFinished += delegate { _ = FinishWindow.Instance.Open(); };
         }
 
         private void OnDisable()
         {
             if (Application.isFocused)
             {
-                OnGameFinished -= FinishWindow.Instance.Open;
+                OnGameFinished -= delegate { _ = FinishWindow.Instance.Open(); };
             }
         }
     }
