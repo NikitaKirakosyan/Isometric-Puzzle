@@ -4,6 +4,7 @@
  */
 using System;
 using NikitaKirakosyan.Patterns;
+using NikitaKirakosyan.UI;
 using UnityEngine;
 
 namespace NikitaKirakosyan
@@ -13,29 +14,19 @@ namespace NikitaKirakosyan
         public static bool IsPause { get; private set; } = false;
         public static bool LevelCompleted { get; private set; } = false;
 
-        [SerializeField] private GameObject _finishWindow = null;
-
         public Action OnGameFinished { get; private set; } = null;
-
-        private void Awake()
-        {
-            SetWindowState(false);
-        }
 
         private void OnEnable()
         {
-            OnGameFinished += delegate { SetWindowState(true); };
+            OnGameFinished += FinishWindow.Instance.Open;
         }
 
         private void OnDisable()
         {
-            OnGameFinished -= delegate { SetWindowState(true); };
-        }
-
-        private void SetWindowState(bool value)
-        {
-            _finishWindow.SetActive(value);
-            LevelCompleted = _finishWindow.activeSelf;
+            if (Application.isFocused)
+            {
+                OnGameFinished -= FinishWindow.Instance.Open;
+            }
         }
     }
 }

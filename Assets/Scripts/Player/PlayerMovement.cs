@@ -3,6 +3,7 @@
  * e-mail : nikita.kirakosyan.work@gmail.com
  */
 using System.Collections;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace NikitaKirakosyan.Player
@@ -34,7 +35,7 @@ namespace NikitaKirakosyan.Player
 
         private void Update()
         {
-            if (CanMove == false || GameManager.LevelCompleted)
+            if (!CanMove || GameManager.LevelCompleted)
             {
                 return;
             }
@@ -61,21 +62,20 @@ namespace NikitaKirakosyan.Player
         {
             Transform destinationT = null;
             Vector3 position = PlayerPosition + movementShift;
-            Transform nextCell = GameField.Instance.Cells.Find(cell => cell.position == position);
 
-            while (nextCell != null)
+            while (GameField.Instance.Cells.Find(cell => cell.position == position))
             {
-                destinationT = nextCell;
+                destinationT = GameField.Instance.Cells.Find(cell => cell.position == position);
                 position += movementShift;
             }
 
             if (destinationT != null)
             {
-                StartCoroutine(SmoothMoveTo(destinationT.position));
+                SmoothMoveTo(destinationT.position).Forget();
             }
         }
 
-        private IEnumerator SmoothMoveTo(Vector3 destination)
+        private async UniTaskVoid SmoothMoveTo(Vector3 destination)
         {
             CanMove = false;
             var position = PlayerPosition;
@@ -84,7 +84,7 @@ namespace NikitaKirakosyan.Player
             {
                 position = Vector3.MoveTowards(position, destination, _moveSpeed * Time.deltaTime);
                 transform.position = position + _deltaPlayerPosition;
-                yield return null;
+                await UniTask.Yield();
             }
 
             CanMove = true;
