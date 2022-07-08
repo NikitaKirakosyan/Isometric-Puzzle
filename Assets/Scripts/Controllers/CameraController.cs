@@ -6,7 +6,7 @@ using NikitaKirakosyan.Patterns;
 using NikitaKirakosyan.Player;
 using UnityEngine;
 
-namespace NikitaKirakosyan
+namespace NikitaKirakosyan.Controllers
 {
     public sealed class CameraController : Singleton<CameraController>
     {

@@ -10,7 +10,7 @@ using NikitaKirakosyan.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace NikitaKirakosyan
+namespace NikitaKirakosyan.Managers
 {
     public sealed class SceneLoadingManager : Singleton<SceneLoadingManager>
     {

@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 namespace NikitaKirakosyan
 {
+    [ExecuteInEditMode]
     public class GradientEffect : MonoBehaviour
     {
         public Gradient gradient = null;
@@ -14,7 +15,7 @@ namespace NikitaKirakosyan
 
         public Image Image { get; private set; } = null;
 
-        private void Awake()
+        private void OnValidate()
         {
             Image = GetComponent<Image>();
 

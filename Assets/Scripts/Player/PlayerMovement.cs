@@ -2,8 +2,8 @@
  * author : Kirakosyan Nikita
  * e-mail : nikita.kirakosyan.work@gmail.com
  */
-using System.Collections;
 using Cysharp.Threading.Tasks;
+using NikitaKirakosyan.Managers;
 using UnityEngine;
 
 namespace NikitaKirakosyan.Player
